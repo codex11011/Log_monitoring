@@ -1,1 +1,39 @@
-
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Socket.io</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+  </head>
+  <body>
+    <h2>Logs</h2>
+    <div id="selected">
+      <ul id="list">
+        <% for(let i=0; i< data.length; i++){ if(data[i] != ""){ %>
+        <li><%= data[i] %></li>
+        <%}%> <%}%>
+      </ul>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script>
+      let socket = io.connect("http://localhost:3000/");
+      $(document).ready(() => {
+        socket.on("broadcast", message => {
+          console.log(message);
+          if (message.description != "") {
+            $("#list").append(`<li>${message.description}</li>`);
+          }
+          if ($("#selected ul").children().length > 10) {
+            $("#list li")
+              .first()
+              .remove();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
